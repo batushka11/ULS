@@ -24,15 +24,15 @@ typedef struct s_fileinfo {
     struct stat st;
 }              t_fileinfo;
 
-DIR* mx_opendir(const char* name);
+DIR* mx_opendir(const char* name, int* exit_status);
 
-int mx_dir_size(char* path, unsigned short flags);
+int mx_dir_size(char* path, unsigned short flags, int* exit_status);
 
 int mx_max_name_length(t_fileinfo arr[], int size);
 
 void mx_printnchar(char c, int n);
 
-void mx_print_dir(char* name, unsigned short flags, int* exit_status);
+void mx_print_dir(char* name, unsigned short flags, int* exit_status, bool print_name);
 
 void mx_print_files(t_fileinfo files[], int size, unsigned short flags, bool is_dir);
 
@@ -66,9 +66,11 @@ void mx_print_xattr(const char *path);
 
 void mx_print_color_name(t_fileinfo file);
 
-char* mx_get_time_str(t_fileinfo file, unsigned short flags);
+char* mx_get_time(t_fileinfo file, unsigned short flags);
 
 void mx_print_error(const char* filename);
+
+void mx_free_fileinfo_arr(t_fileinfo* arr, int size);
 
 #endif
 

@@ -1,6 +1,6 @@
 #include "../inc/uls.h"
 
-DIR* mx_opendir(const char* name) {
+DIR* mx_opendir(const char* name, int* exit_status) {
     DIR* dir = opendir(name);
 
     if(dir == NULL) {
@@ -8,7 +8,8 @@ DIR* mx_opendir(const char* name) {
         mx_printerr(name);
         mx_printerr(": ");
         mx_printerr(strerror(errno));
-        exit(EXIT_FAILURE);
+        mx_printerr("\n");
+        *exit_status = EXIT_FAILURE;
     }
 
     return dir;

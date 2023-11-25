@@ -1,5 +1,36 @@
 #include "../inc/uls.h"
 
+char* mx_get_size(t_fileinfo file) {
+    if((file.st.st_mode & S_IFMT) == S_IFBLK || (file.st.st_mode & S_IFMT) == S_IFCHR) {
+        if(file.st.st_rdev == 0) {
+            return mx_itoa(file.st.st_rdev);
+        }
+        return mx_strjoin("0x", mx_nbr_to_hex(file.st.st_rdev));
+    }
+
+    return mx_itoa(file.st.st_size);
+}
+
+char* mx_get_usrname(t_fileinfo file) {
+    struct passwd* pwd = getpwuid(file.st.st_uid);
+
+    if(pwd == NULL) {
+        return mx_itoa(file.st.st_uid);
+    }
+    
+    return mx_strdup(pwd->pw_name);
+}
+
+char* mx_get_grpname(t_fileinfo file) {
+    struct group* grp = getgrgid(file.st.st_gid);
+
+    if(grp == NULL) {
+        return mx_itoa(file.st.st_gid);
+    }
+    
+    return mx_strdup(grp->gr_name);
+}
+
 void mx_long_output(t_fileinfo files[], int size, unsigned short flags, bool is_dir) {
     blkcnt_t total = 0;
 
@@ -10,15 +41,15 @@ void mx_long_output(t_fileinfo files[], int size, unsigned short flags, bool is_
 
     for(int i = 0 ; i < size; i++) {
         t_fileinfo file = files[i];
-        struct passwd* pwd = getpwuid(file.st.st_uid);
-        struct group*  grp = getgrgid(file.st.st_gid);
+        // struct passwd* pwd = getpwuid(file.st.st_uid);
+        // struct group*  grp = getgrgid(file.st.st_gid);
         
         info[i][0] = mx_get_permissions(file);
         info[i][1] = mx_itoa(file.st.st_nlink);
-        info[i][2] = mx_strdup(pwd->pw_name);
-        info[i][3] = mx_strdup(grp->gr_name);
-        info[i][4] = mx_itoa(file.st.st_size);
-        info[i][5] = mx_get_time_str(file, flags);      
+        info[i][2] = mx_get_usrname(file);
+        info[i][3] = mx_get_grpname(file);
+        info[i][4] = mx_get_size(file);
+        info[i][5] = mx_get_time(file, flags);      
         info[i][6] = mx_strdup(file.name);
         total += file.st.st_blocks;
     }

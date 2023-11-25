@@ -1,6 +1,6 @@
 #include "../inc/uls.h"
 
-char* mx_get_time_str(t_fileinfo file, unsigned short flags) {
+char* mx_get_time(t_fileinfo file, unsigned short flags) {
     time_t tm = 0;
     if(flags & FLAG_c){
         tm = file.st.st_ctime;
