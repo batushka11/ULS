@@ -41,8 +41,6 @@ void mx_long_output(t_fileinfo files[], int size, unsigned short flags, bool is_
 
     for(int i = 0 ; i < size; i++) {
         t_fileinfo file = files[i];
-        // struct passwd* pwd = getpwuid(file.st.st_uid);
-        // struct group*  grp = getgrgid(file.st.st_gid);
         
         info[i][0] = mx_get_permissions(file);
         info[i][1] = mx_itoa(file.st.st_nlink);

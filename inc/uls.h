@@ -26,7 +26,7 @@ typedef struct s_fileinfo {
 
 DIR* mx_opendir(const char* name, int* exit_status);
 
-int mx_dir_size(char* path, unsigned short flags, int* exit_status);
+int mx_dir_size(char* path, unsigned short flags);
 
 int mx_max_name_length(t_fileinfo arr[], int size);
 

@@ -1,11 +1,15 @@
 #include "../inc/uls.h"
 
-int mx_dir_size(char* path, unsigned short flags, int* exit_status) {
+int mx_dir_size(char* path, unsigned short flags) {
     DIR* dir = NULL;
     struct dirent *entry = NULL;
     int size = 0;
 
-    dir = mx_opendir(path,exit_status);
+    dir = opendir(path);
+    if(dir == NULL){
+        return -1;
+    }
+
     while((entry = readdir(dir)) != NULL) {
         if(mx_strcmp(entry->d_name, ".") == 0 || mx_strcmp(entry->d_name, "..") == 0) {
             if(!(flags & FLAG_a)) {

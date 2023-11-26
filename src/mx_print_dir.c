@@ -5,9 +5,16 @@ void mx_print_dir(char* name, unsigned short flags, int* exit_status, bool print
         mx_printstr(name);
         mx_printstr(":\n");
     }
-    DIR* dir = mx_opendir(name, exit_status);
-    if( dir != NULL) {
-        int size = mx_dir_size(name, flags, exit_status);
+    DIR* dir = opendir(name);
+    if(dir == NULL){
+        if(flags & FLAG_l){
+            mx_printstr("total 0\n");
+        }
+        mx_print_error(name);
+        *exit_status = EXIT_FAILURE;
+    }
+    else {
+        int size = mx_dir_size(name, flags);
         struct s_fileinfo *files = (t_fileinfo*)malloc(size * sizeof(t_fileinfo));
         
         int i = 0;
